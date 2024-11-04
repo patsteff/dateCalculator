@@ -1,37 +1,30 @@
 import { useState } from "react";
-import Header from "./components/Header.jsx";
 import UserDate from "./components/UserDate.jsx";
-import UserInput from "./components/UserInput.jsx";
-import Results from "./components/Results.jsx";
+import Output from "./components/Output.jsx";
+
 
 function App() {
 
-  const [userInput, setUserInput] = useState({
-    initialInvestment: 10000,
-    annualInvestment: 1200,
-    expectedReturn: 6,
-    duration: 10
-});
-
-const inputIsValid = userInput.duration >= 1;
-
-function handleChange(inputIdentifier, newValue) {
-  setUserInput(prevUserInput => {
-      return {
-          ...prevUserInput,
-          [inputIdentifier]: +newValue 
-      };
+  const [userDateInput, setUserDateInput] = useState({
+    lastPeriod: new Date().toISOString().slice(0, 10),
+    duration: 28,
   });
-}
+
+
+  function handleChange(inputIdentifier, newValue) {
+    setUserDateInput((prevUserInput) => {
+      return {
+        ...prevUserInput,
+        [inputIdentifier]: inputIdentifier === "duration" ? parseInt(newValue, 10) : newValue,
+      };
+    });
+  }
 
 
   return (
     <>
-    <Header/>
-    <UserDate/>
-    <UserInput userInputs={userInput} onChangeInput={handleChange}/>
-    {!inputIsValid && <p className="center">Please enter a valid input for duration</p>}
-    {inputIsValid && <Results input={userInput}/>}
+    <UserDate userDateInput={userDateInput} handleChange={handleChange}/>
+    <Output userDateInput={userDateInput}/>
     </>
   )
 }
